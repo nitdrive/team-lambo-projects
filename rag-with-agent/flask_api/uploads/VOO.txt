@@ -1,0 +1,42 @@
+VOO
+
+About: This document is as short description Vanguard S&P 500 ETF and its details
+When to use: Use the below information when you query about Vanguard S&P 500 ETF
+Who can use: A Stock broker or stock expert can use this information
+
+Vanguard S&P 500 ETF
+
+Product summary
+Invests in stocks in the S&P 500 Index, representing 500 of the largest U.S. companies.
+Goal is to closely track the index’s return, which is considered a gauge of overall U.S. stock returns.
+Offers high potential for investment growth; share value rises and falls more sharply than that of funds holding bonds.
+More appropriate for long-term goals where your money’s growth is essential.
+
+Fund management
+Vanguard Equity Index Group
+
+Price 
+
+Minimum Investment is $1.00 as of 04/19/2024
+
+Market price is $455.04 as of 04/19/2024
+
+Market price change is -$4.18 (-0.91%) as of 04/19/2024
+
+Expense Ratio is 0.03% as of 12/31/2023
+
+NAV Price is $455.13 as of 04/19/2024
+
+NAV Change is -$4.00 (-0.87%) as of 04/19/2024
+
+Historical volatility measures as of 03/31/2024
+Benchmark	R-Squared3	Beta3
+S&P 500 Index1	1.00	1.00
+Dow Jones U.S. Total Stock Market Index	0.99	0.98
+
+Risks associated with moderate to aggressive funds
+Vanguard funds classified as moderate to aggressive are broadly diversified but are subject to wide fluctuations in share price because they hold virtually all of their assets in common stocks. In general, such funds are appropriate for investors who have a long-term investment horizon (ten years or longer), who are seeking growth in capital as a primary objective, and who are prepared to endure the sharp and sometimes prolonged declines in share prices that occur from time to time in the stock market. This price volatility is the trade-off for the potentially high returns that common stocks can provide. The level of current income produced by funds in this category ranges from moderate to very low.
+
+This information was compiled by Nithin Reddy Ayiluri
+
+
