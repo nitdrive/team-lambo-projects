@@ -16,6 +16,8 @@ from langchain.callbacks.manager import (
     AsyncCallbackManagerForToolRun,
     CallbackManagerForToolRun,
 )
+import requests, json
+import os
 
 load_dotenv(find_dotenv(), override=True)
 
@@ -80,9 +82,12 @@ class YahooFinanceTool(BaseTool):
             response += f"BookValue={info['bookValue']}, "
 
             # Dividend Metrics
-            response += f"dividendYield={info['dividendYield']}, "
-            response += f"dividendRate={info['dividendRate']}, "
-            response += f"payoutRatio={info['payoutRatio']}, "
+            if 'dividendYield' in info:
+                response += f"dividendYield={info['dividendYield']}, "
+            if 'dividendRate' in info:
+                response += f"dividendRate={info['dividendRate']}, "
+            if 'payoutRatio' in info:
+                response += f"payoutRatio={info['payoutRatio']}, "
 
             # Volume and Liquidity Metrics
             response += f"volume={info['volume']}, "
@@ -146,6 +151,37 @@ class YahooFinanceTool(BaseTool):
         return await self._run(query)
 
 
+class MambaQueryTool(BaseTool):
+    name = "general-mamba-query-tool"
+    description = "Lookup general queries"
+
+    def _run(self, query: str) -> str:
+        """Use the mamba LLM to look up db information."""
+        print(f"Querying MambaQueryTool: {query}")
+        headers = {"Authorization": f"Bearer {os.environ.get('HF_API_TOKEN')}", "Content-Type": "application/json"}
+        try:
+            data = {
+                "inputs": {
+                    "query": f"{query}"
+                }
+            }
+            response = requests.post(url=os.environ.get('MAMBA_API_URL'), headers=headers, data=json.dumps(data))
+
+            result = response.content.decode('utf-8')
+            print(result)
+            result = result.split('<|assistant|>')[1].replace("<|endoftext|>\"}", "")
+            print(f"Processed: {result}")
+
+            return result
+        except Exception as e:
+            print("Error MambaQueryTool")
+            print(e)
+            raise f"Error: {e}"
+
+    async def _arun(self, query: str) -> str:
+        return await self._run(query)
+
+
 class GeneralQueryTool(BaseTool):
     name = "general-query-tool"
     description = "Lookup general queries"
@@ -174,21 +210,14 @@ class GeneralQueryTool(BaseTool):
 
 class VanguardQueryTool(BaseTool):
     name = "vanguard-query-tool"
-    description = "Lookup queries about Vanguard funds like S&P 500 ETF ('VOO')"
+    description = "Lookup queries about Vanguard"
 
     def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> str:
         """Use the LLM to look up Vanguard information."""
         try:
-            print("Tags")
-            if run_manager:
-                print("Run Manager exists")
-                print(run_manager)
-                print(run_manager.tags)
-            else:
-                print("Run Manager doesn't exist")
             print(f"Querying VanguardQueryTool: {query}")
             vector_store = get_db()
-            answer = ask_and_get_answer(vector_store, query, 3)
+            answer = ask_and_get_answer(vector_store, query, 3, called_from='VanguardQueryTool')
             print(answer)
             return answer
         except Exception as e:
@@ -202,10 +231,12 @@ class VanguardQueryTool(BaseTool):
 
 
 def execute_chain(user_input: str):
+    # GeneralQueryTool()
     tools = [
-        # VanguardQueryTool(),
+        VanguardQueryTool(),
         GetStockTickerTool(),
         YahooFinanceTool(),
+        # MambaQueryTool(),
         GeneralQueryTool()
     ]
 
@@ -215,7 +246,7 @@ def execute_chain(user_input: str):
         [
             (
                 "system",
-                "You are a helpful assistant that answers questions. Note: Not all companies will have stock symbol so if you cannot find something using get-stock-ticker tool, then use the general-query-tool tool.",
+                "You are a helpful assistant that answers questions. If a question has derogatory or sexual references don't try to answer it. Note: Not all companies will have stock symbol so if you cannot find something using get-stock-ticker tool, then use the general-mamba-query-tool tool. Show the response as is don't summarize it.",
             ),
             ("placeholder", "{chat_history}"),
             ("human", "{input}"),

@@ -2,6 +2,9 @@ import os
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.document_loaders import Docx2txtLoader
 from langchain_community.document_loaders import TextLoader
+from langchain_community.document_loaders import UnstructuredHTMLLoader
+
+
 from langchain.chains import APIChain
 
 
@@ -17,6 +20,8 @@ class DocumentLoader:
             loader = Docx2txtLoader(file)
         elif extension == '.txt':
             loader = TextLoader(file)
+        elif extension == '.html':
+            loader = UnstructuredHTMLLoader(file)
         else:
             print('Document format is not supported!')
             return None

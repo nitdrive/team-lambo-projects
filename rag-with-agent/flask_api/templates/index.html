@@ -49,7 +49,8 @@
         }
         .fixed-bottom {
             padding: 10px;
-            background: #efe4e4;
+            background: rgb(245, 246, 246);
+
             width: 100%;
             display: flex;
             align-items: center;
@@ -125,8 +126,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h2>Lambo Assistant</h2>
-            <button id="exportButton" class="btn btn-primary">Export</button>
+            <h2 style="color:#c20029;">LamboAssistant</h2>
+            <button id="exportButton" class="btn btn-secondary">Export</button>
         </div>
         <br>
         <div class="row">
@@ -143,18 +144,18 @@
                             <div class="container mt-3">
                                 <div class="row">
                                     <div class="col-md-6 d-grid">
-                                        <button class="btn btn-outline-primary btn-block mb-2" onclick="sendQuestion(this)">What are the best stocks to buy right now?</button>
+                                        <button class="btn btn-outline-dark btn-block mb-2" onclick="sendQuestion(this)">What are the best stocks to buy right now?</button>
                                     </div>
                                     <div class="col-md-6 d-grid">
-                                        <button class="btn btn-outline-primary btn-block mb-2" onclick="sendQuestion(this)">How do stock markets react to economic changes?</button>
+                                        <button class="btn btn-outline-dark btn-block mb-2" onclick="sendQuestion(this)">How do stock markets react to economic changes?</button>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 d-grid">
-                                        <button class="btn btn-outline-primary btn-block mb-2" onclick="sendQuestion(this)">What are the risks of investing in stocks?</button>
+                                        <button class="btn btn-outline-dark btn-block mb-2" onclick="sendQuestion(this)">What are the risks of investing in stocks?</button>
                                     </div>
                                     <div class="col-md-6 d-grid">
-                                        <button class="btn btn-outline-primary btn-block" onclick="sendQuestion(this)">How do I analyze a company's financial health?</button>
+                                        <button class="btn btn-outline-dark btn-block mb-2" onclick="sendQuestion(this)">How do I analyze a company's financial health?</button>
                                     </div>
                                 </div>
                             </div>
@@ -173,7 +174,7 @@
                         <textarea class="form-control question-input" id="question" rows="1" style="resize: none;" placeholder="Ask me a question"></textarea>
                     </div>
                     <div class="ask-button-col">
-                        <button class="btn btn-success"  id="ask-button" onclick="askQuestion()">Ask</button>
+                        <button class="btn btn-danger"  id="ask-button" onclick="askQuestion()">Ask</button>
                     </div>
                 </div>
             </div>
@@ -240,10 +241,13 @@
                 i++;
             } else {
                 document.getElementById('avatar').src = 'static/waiting_avatar.png'; // Change to waiting avatar after typing
+                return 0;
             }
             setTimeout(typeCharacter, 50); // Adjust typing speed
         }
         setTimeout(typeCharacter, 50); // Start typing effect
+
+        return 0;
     }
 
     document.getElementById('exportButton').addEventListener('click', function() {
@@ -318,13 +322,15 @@
             synth.cancel(); // Stops any currently speaking synthesis
         }
 
-        inputTxt = inputTxt.replace("SimpliGPT:", ""); // Remove the prefix if any in the speech
+        inputTxt = inputTxt.replace("LamboAssistant:", ""); // Remove the prefix if any in the speech
 
         const utterThis = new SpeechSynthesisUtterance(inputTxt);
         let voiceFound = false;
 
+        // "Google UK English Female"
+        // "Karen"
         for (let voice of voiceData.voices) {
-            if (voice.name === "Google UK English Female") {
+            if (voice.name === "Karen") {
                 utterThis.voice = voice;
                 voiceFound = true;
                 break;
@@ -335,8 +341,11 @@
             console.warn("Preferred voice not found, using default");
         }
 
-        utterThis.pitch = 1;
-        utterThis.rate = 1;
+        utterThis.pitch = 2;
+        utterThis.rate = 0.7;
+        // utterThis.pitch = 1.5;
+        // utterThis.rate = 0.9;
+
         synth.speak(utterThis);
     }
 
